@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qx-payment-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: qx-payment-service}
+  template:
+    metadata:
+      labels: {app: qx-payment-service}
+    spec:
+      containers:
+        - name: payment
+          image: your-registry/qx-payment-service:1.0
+          env:
+            - name: SIGNING_ALG          # CR-06
+              value: "ES256"
+            - name: QX_KEY_SERVICE_DIR   # CR-01, CR-02, CR-07, CR-09
+              value: /opt/qx/qx-key-service
+          volumeMounts:
+            - name: qx-keys
+              mountPath: /opt/qx/qx-key-service/keys
+              readOnly: true
+      volumes:
+        - name: qx-keys
+          secret:
+            secretName: qx-key-service-keys

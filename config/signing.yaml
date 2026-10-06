@@ -1,0 +1,5 @@
+# CR-06 source: algorithm used by qx-payment-service/app/jwt_from_config.py
+payment-service:
+  signing:
+    algorithm: ES256          # ECDSA P-256 + SHA-256
+    key_source: qx-key-service/keys/ec_signing_private.pem
